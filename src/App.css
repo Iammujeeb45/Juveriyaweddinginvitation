@@ -1,0 +1,198 @@
+/* Layout & Flexbox */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.flex-wrap { flex-wrap: wrap; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.inset-0 { inset: 0; }
+.top-0 { top: 0; }
+.left-2 { left: 0.5rem; }
+.right-2 { right: 0.5rem; }
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.min-h-screen { min-height: 100vh; }
+.pointer-events-none { pointer-events: none; }
+.overflow-hidden { overflow: hidden; }
+.overflow-x-hidden { overflow-x: hidden; }
+.cursor-pointer { cursor: pointer; }
+.touch-none { touch-action: none; }
+.text-center { text-align: center; }
+.italic { font-style: italic; }
+.uppercase { text-transform: uppercase; }
+
+/* Sizing & Spacing */
+.mx-auto { margin-left: auto; margin-right: auto; }
+.my-2 { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+.pt-8 { padding-top: 2rem; }
+.pb-16 { padding-bottom: 4rem; }
+.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+.py-14 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+.py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+.px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.px-7 { padding-left: 1.75rem; padding-right: 1.75rem; }
+.p-5 { padding: 1.25rem; }
+.p-7 { padding: 1.75rem; }
+.p-8 { padding: 2rem; }
+
+.max-w-2xl { max-width: 42rem; }
+.max-w-sm { max-width: 24rem; }
+
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-5 { gap: 1.25rem; }
+
+/* Grid */
+.grid { display: grid; }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid-cols-7 { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+
+/* Borders & Radii */
+.rounded-full { border-radius: 9999px; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-3xl { border-radius: 1.5rem; }
+.rounded-\[2rem\] { border-radius: 2rem; }
+.rounded-\[inherit\] { border-radius: inherit; }
+.border { border-width: 1px; border-style: solid; }
+
+/* Text Sizing */
+.text-\[0\.6rem\] { font-size: 0.6rem; }
+.text-\[0\.65rem\] { font-size: 0.65rem; }
+.text-\[0\.7rem\] { font-size: 0.7rem; }
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+.text-5xl { font-size: 3rem; line-height: 1; }
+.leading-tight { line-height: 1.25; }
+
+/* Letter Spacing */
+.tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+.tracking-\[0\.25em\] { letter-spacing: 0.25em; }
+.tracking-\[0\.3em\] { letter-spacing: 0.3em; }
+.tracking-\[0\.35em\] { letter-spacing: 0.35em; }
+.tracking-\[0\.4em\] { letter-spacing: 0.4em; }
+
+/* Opacity & Colors */
+.opacity-40 { opacity: 0.4; }
+.text-gold\/70 { color: oklch(72% 0.12 80 / 0.7); }
+.text-foreground\/70 { color: oklch(29% 0.055 28 / 0.7); }
+.text-foreground\/80 { color: oklch(29% 0.055 28 / 0.8); }
+
+/* Decorative dividers */
+.divider-flourish {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+  color: var(--gold);
+}
+
+.divider-line-left {
+  height: 1px;
+  width: 3rem;
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+
+.divider-line-right {
+  height: 1px;
+  width: 3rem;
+  background: linear-gradient(to left, transparent, var(--gold));
+}
+
+/* Calendar Date Circles */
+.calendar-day-circle {
+  position: relative;
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-family: var(--font-serif);
+  font-size: 0.875rem;
+  user-select: none;
+}
+
+.calendar-day-nikkah {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(104, 27, 36, 0.3);
+}
+
+.calendar-day-haldi {
+  border: 1.5px solid var(--gold);
+  color: var(--maroon);
+  font-weight: 600;
+  background-color: rgba(212, 163, 75, 0.1);
+}
+
+.calendar-day-normal {
+  color: var(--muted-foreground);
+}
+
+/* Calendar Pulse Halo */
+.calendar-halo {
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background-color: oklch(72% 0.12 80 / 0.35);
+  pointer-events: none;
+}
+
+/* Responsiveness */
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm\:gap-4 { gap: 1rem; }
+  .sm\:px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+  .sm\:py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  .sm\:px-10 { padding-left: 2.5rem; padding-right: 2.5rem; }
+  .sm\:py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+  .sm\:text-xs { font-size: 0.75rem; }
+  .sm\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+  .sm\:text-6xl { font-size: 3.75rem; line-height: 1; }
+}
+
+/* Custom Scroll Mouse Indicator */
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  text-decoration: none;
+  font-family: var(--font-body);
+  transition: opacity 0.3s ease;
+  margin-top: 2rem;
+}
+
+.scroll-indicator:hover {
+  opacity: 0.8;
+}

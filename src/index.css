@@ -1,0 +1,197 @@
+:root {
+  --background: oklch(97.7% 0.013 88);
+  --foreground: oklch(29% 0.055 28);
+  --card: oklch(99.2% 0.008 90);
+  --card-foreground: oklch(29% 0.055 28);
+  --popover: oklch(99.2% 0.008 90);
+  --popover-foreground: oklch(29% 0.055 28);
+  --primary: oklch(70% 0.115 78);
+  --primary-foreground: oklch(24% 0.05 30);
+  --secondary: oklch(94% 0.022 90);
+  --secondary-foreground: oklch(32% 0.07 25);
+  --muted: oklch(94.5% 0.018 88);
+  --muted-foreground: oklch(38% 0.04 35);
+  --accent: oklch(38% 0.125 20);
+  --accent-foreground: oklch(98% 0.012 88);
+  --border: oklch(85% 0.045 82);
+  --input: oklch(85% 0.045 82);
+  --ring: oklch(70% 0.115 78);
+  --gold: oklch(72% 0.12 80);
+  --gold-soft: oklch(87% 0.07 85);
+  --maroon: oklch(38% 0.125 20);
+  --emerald: oklch(42% 0.085 160);
+  --shadow-soft: 0 18px 50px -24px oklch(38% 0.125 20 / 0.35);
+  --gradient-gold: linear-gradient(135deg, oklch(78% 0.1 88), oklch(66% 0.13 72), oklch(82% 0.08 92));
+
+  --font-serif: "Lora", "Playfair Display", Georgia, serif;
+  --font-display: "Playfair Display", "Lora", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.scroll-locked,
+body.scroll-locked {
+  overflow: hidden !important;
+  height: 100% !important;
+  overscroll-behavior: none !important;
+  touch-action: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+/* Arabesque Geometric Pattern Background */
+.arabesque-bg {
+  background-image:
+    radial-gradient(circle at 1px 1px, oklch(0.72 0.12 80 / 0.5) 1px, transparent 0),
+    repeating-linear-gradient(45deg, oklch(0.72 0.12 80 / 0.07) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(-45deg, oklch(0.72 0.12 80 / 0.07) 0 1px, transparent 1px 22px);
+  background-size: 24px 24px, auto, auto;
+}
+
+/* Ornate Framed Cards */
+.ornate-frame {
+  border: 1px solid var(--gold-soft);
+  box-shadow: 0 0 0 1px oklch(72% 0.12 80 / 0.25) inset, var(--shadow-soft);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ornate-frame:hover {
+  box-shadow: 0 0 0 1px oklch(72% 0.12 80 / 0.35) inset, 0 22px 55px -20px oklch(38% 0.125 20 / 0.4);
+}
+
+/* Custom Utilities matching exact names and designs */
+.bg-background { background-color: var(--background); }
+.text-foreground { color: var(--foreground); }
+.bg-card { background-color: var(--card); }
+.text-card-foreground { color: var(--card-foreground); }
+.text-maroon { color: var(--maroon); }
+.text-gold { color: var(--gold); }
+.border-gold { border-color: var(--gold); }
+.text-muted-foreground { color: var(--muted-foreground); }
+.bg-accent { background-color: var(--accent); }
+.text-accent-foreground { color: var(--accent-foreground); }
+
+/* Typography */
+.font-display { font-family: var(--font-display); }
+.font-serif { font-family: var(--font-serif); }
+.font-body { font-family: var(--font-body); }
+
+/* Helpers */
+.tabular-nums { font-variant-numeric: tabular-nums; }
+.tracking-widest-4 { letter-spacing: 0.4em; }
+.tracking-widest-3 { letter-spacing: 0.3em; }
+.tracking-widest-2 { letter-spacing: 0.2em; }
+
+/* Interactive Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  padding: 0.75rem 1.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(104, 27, 36, 0.25);
+}
+
+.btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(104, 27, 36, 0.32);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--maroon);
+  padding: 0.75rem 1.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary:hover {
+  background-color: oklch(72% 0.12 80 / 0.12);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+
+/* Reset Scratch button */
+.reset-scratch-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 253, 250, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--gold-soft);
+  color: var(--maroon);
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-family: var(--font-body);
+  letter-spacing: 0.1em;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-scratch-btn:hover {
+  background: rgba(255, 253, 250, 0.98);
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
