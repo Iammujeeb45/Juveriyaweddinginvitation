@@ -26,6 +26,7 @@
   --font-serif: "Lora", "Playfair Display", Georgia, serif;
   --font-display: "Playfair Display", "Lora", Georgia, serif;
   --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-arabic: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", "Geeza Pro", serif;
 }
 
 * {
@@ -100,6 +101,7 @@ body {
 .font-display { font-family: var(--font-display); }
 .font-serif { font-family: var(--font-serif); }
 .font-body { font-family: var(--font-body); }
+.font-arabic { font-family: var(--font-arabic); }
 
 /* Helpers */
 .tabular-nums { font-variant-numeric: tabular-nums; }

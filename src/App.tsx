@@ -226,14 +226,17 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
       />
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center">
-        <p className="text-xs uppercase tracking-[0.4em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
-          Bismillah
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
+        <p className="font-arabic text-xl sm:text-2xl font-bold text-[oklch(0.26_0.07_25)] leading-relaxed" dir="rtl">
+          بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
         </p>
-        <p className="font-display text-4xl sm:text-5xl font-bold leading-tight text-[oklch(0.26_0.07_25)]">
+        <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.35em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
+          Bismillah · In the name of Allah
+        </p>
+        <p className="font-display text-4xl sm:text-5xl font-bold leading-tight text-[oklch(0.26_0.07_25)] mt-1">
           Wedding Invitation
         </p>
-        <p className="text-xs sm:text-sm uppercase tracking-[0.3em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
+        <p className="text-xs sm:text-sm uppercase tracking-[0.25em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
           You are cordially invited
         </p>
         <motion.div
@@ -606,7 +609,11 @@ export default function App() {
         {/* The Card Container */}
         <div className="relative w-full">
           <div className="ornate-frame relative overflow-hidden rounded-[2rem] bg-card px-6 py-12 text-center sm:px-10 sm:py-16">
-            <p className="font-body text-xs sm:text-sm uppercase tracking-[0.3em] text-gold font-medium">
+            <p className="font-arabic text-2xl sm:text-3xl font-bold text-maroon leading-relaxed" dir="rtl">
+              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+            </p>
+            
+            <p className="mt-1 font-body text-xs sm:text-sm uppercase tracking-[0.3em] text-gold font-medium">
               Bismillah · In the name of Allah
             </p>
             <OrnateFlourish />
@@ -695,10 +702,19 @@ export default function App() {
       {/* Formal Invitation Solicitations */}
       <FadeSection className="relative mx-auto max-w-2xl px-4 py-8">
         <div className="ornate-frame rounded-3xl bg-card p-7 text-center">
+          <p className="font-arabic text-2xl sm:text-3xl font-bold text-maroon leading-relaxed" dir="rtl">
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+          </p>
+          <p className="mt-1 font-body text-xs sm:text-sm uppercase tracking-[0.3em] text-gold font-medium">
+            Bismillah · In the name of Allah
+          </p>
+          <div className="my-3">
+            <OrnateFlourish />
+          </div>
           <p className="font-body text-sm sm:text-base text-foreground/80 leading-relaxed font-normal">
-            Mr. Shaik Chand Basha & Mrs. Arifa solicit your gracious presence with
-            family and friends on the auspicious occasion of the marriage of their
-            daughter
+            Mr. Shaik Chand Basha & Mrs. Arifa solicit your gracious presence
+            with family and friends on the auspicious occasion of the marriage
+            of their daughter
           </p>
           <p className="mt-4 font-display text-xl sm:text-2xl font-bold text-maroon">
             Noor-E-Chashmi · Shaik Juveriya, B.Sc.
@@ -802,7 +818,10 @@ export default function App() {
       </FadeSection>
 
       {/* SEARCH / SAVE THE DATE CALENDAR SECTION */}
-      <FadeSection id="calendar" className="relative mx-auto max-w-2xl px-4 py-12">
+      <FadeSection
+        id="calendar"
+        className="relative mx-auto max-w-2xl px-4 py-12"
+      >
         <div className="text-center">
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-maroon">
             Search the date
