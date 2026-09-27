@@ -167,6 +167,36 @@ body {
 }
 
 
+/* Floating Audio Control */
+.floating-audio-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 253, 250, 0.88);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--gold-soft);
+  color: var(--maroon);
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.floating-audio-btn:hover {
+  background: rgba(255, 253, 250, 0.98);
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
 /* Reset Scratch button */
 .reset-scratch-btn {
   position: fixed;

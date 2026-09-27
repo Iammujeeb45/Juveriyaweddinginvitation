@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
-import { RotateCcw, Calendar, MapPin } from "lucide-react";
+import { RotateCcw, Calendar, MapPin, Volume2, VolumeX } from "lucide-react";
 import "./App.css";
 
 // Wedding date: 20 Dec 2026, 10:30 AM IST (05:00 UTC)
@@ -399,17 +399,71 @@ const CalendarWidget: React.FC = () => {
 export default function App() {
   const [revealed, setRevealed] = useState(false);
   const [isRevealing, setIsRevealing] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const playNasheed = useCallback(() => {
+    if (!audioRef.current) {
+      const audio = new Audio("/nasheed.m4a");
+      audio.loop = true;
+      audio.volume = 0.28; // Very lite background music as requested
+      audioRef.current = audio;
+    }
+
+    const audio = audioRef.current;
+    audio.volume = 0.28;
+    audio
+      .play()
+      .then(() => {
+        setIsAudioPlaying(true);
+      })
+      .catch((err) => {
+        console.log("Audio waiting for user gesture:", err);
+      });
+  }, []);
+
+  const toggleAudio = () => {
+    if (!audioRef.current) {
+      playNasheed();
+      return;
+    }
+    if (isAudioPlaying) {
+      audioRef.current.pause();
+      setIsAudioPlaying(false);
+    } else {
+      audioRef.current.volume = 0.28;
+      audioRef.current
+        .play()
+        .then(() => setIsAudioPlaying(true))
+        .catch(() => {});
+    }
+  };
 
   const handleReveal = useCallback(() => {
     setIsRevealing(true);
+    playNasheed();
     window.setTimeout(() => setRevealed(true), 900);
-  }, []);
+  }, [playNasheed]);
 
   const handleResetCard = () => {
     setRevealed(false);
     setIsRevealing(false);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsAudioPlaying(false);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   // Block page scrolling until the scratch card is revealed
   useEffect(() => {
@@ -502,7 +556,19 @@ export default function App() {
         aria-hidden="true"
       />
 
-      {/* Floating Controls: Scratch Reset */}
+      {/* Floating Controls: Audio & Scratch Reset */}
+      {revealed && (
+        <button
+          onClick={toggleAudio}
+          className="floating-audio-btn"
+          title={isAudioPlaying ? "Mute nasheed" : "Play nasheed"}
+          aria-label={isAudioPlaying ? "Mute background nasheed" : "Play background nasheed"}
+        >
+          {isAudioPlaying ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          <span>{isAudioPlaying ? "Nasheed Playing" : "Muted"}</span>
+        </button>
+      )}
+
       {revealed && (
         <button
           onClick={handleResetCard}
@@ -639,7 +705,10 @@ export default function App() {
       </FadeSection>
 
       {/* THE CELEBRATIONS SECTION */}
-      <FadeSection id="celebrations" className="relative mx-auto max-w-2xl px-4 py-12">
+      <FadeSection
+        id="celebrations"
+        className="relative mx-auto max-w-2xl px-4 py-12"
+      >
         <div className="text-center">
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-maroon">
             The celebrations
@@ -699,14 +768,13 @@ export default function App() {
             with
           </p>
           <p className="mt-3 font-display text-xl sm:text-2xl font-bold text-maroon">
-            Barkhurdar · Azeez, BBA
+            Barkhurdar · Shaik Azeez, BBA
           </p>
           <p className="mt-2 font-body text-sm font-medium text-muted-foreground">
             Procurement & Admin Executive
           </p>
           <p className="mt-3 font-body text-sm text-muted-foreground">
-            Eldest son of Mr. Shaik Ameerjaan & Mrs. Thayyibunnisa, 3rd Mile,
-            Nellore
+            Eldest son of Mr. Shaik Ameerjaani & Mrs. Thajunnisha.
           </p>
         </div>
       </FadeSection>
