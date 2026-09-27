@@ -227,10 +227,13 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
         onPointerUp={handlePointerUp}
       />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
-        <p className="font-arabic text-xl sm:text-2xl font-bold text-[oklch(0.26_0.07_25)] leading-relaxed" dir="rtl">
+        <p
+          className="font-arabic text-xl sm:text-2xl font-bold text-[oklch(0.26_0.07_25)] leading-[2.2] pb-1"
+          dir="rtl"
+        >
           بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
         </p>
-        <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.35em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
+        <p className="mt-2 text-[0.65rem] sm:text-xs uppercase tracking-[0.35em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
           Bismillah · In the name of Allah
         </p>
         <p className="font-display text-4xl sm:text-5xl font-bold leading-tight text-[oklch(0.26_0.07_25)] mt-1">
@@ -609,14 +612,19 @@ export default function App() {
         {/* The Card Container */}
         <div className="relative w-full">
           <div className="ornate-frame relative overflow-hidden rounded-[2rem] bg-card px-6 py-12 text-center sm:px-10 sm:py-16">
-            <p className="font-arabic text-2xl sm:text-3xl font-bold text-maroon leading-relaxed" dir="rtl">
+            <p
+              className="font-arabic text-2xl sm:text-3xl font-bold text-maroon leading-[2.2] pb-1"
+              dir="rtl"
+            >
               بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
             </p>
-            
-            <p className="mt-1 font-body text-xs sm:text-sm uppercase tracking-[0.3em] text-gold font-medium">
+
+            <p className="mt-3 sm:mt-4 font-body text-xs sm:text-sm uppercase tracking-[0.3em] text-gold font-medium">
               Bismillah · In the name of Allah
             </p>
-            <OrnateFlourish />
+            <div className="my-2">
+              <OrnateFlourish />
+            </div>
             <p className="mt-2 text-xs uppercase tracking-[0.35em] text-muted-foreground font-medium">
               Wedding Invitation
             </p>
@@ -702,10 +710,14 @@ export default function App() {
       {/* Formal Invitation Solicitations */}
       <FadeSection className="relative mx-auto max-w-2xl px-4 py-8">
         <div className="ornate-frame rounded-3xl bg-card p-7 text-center">
-          <p className="font-arabic text-2xl sm:text-3xl font-bold text-maroon leading-relaxed" dir="rtl">
+          <p
+            className="font-arabic text-2xl sm:text-3xl font-bold text-maroon leading-[2.2] pb-1"
+            dir="rtl"
+          >
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </p>
-          <p className="mt-1 font-body text-xs sm:text-sm uppercase tracking-[0.3em] text-gold font-medium">
+
+          <p className="mt-3 sm:mt-4 font-body text-xs sm:text-sm uppercase tracking-[0.3em] text-gold font-medium">
             Bismillah · In the name of Allah
           </p>
           <div className="my-3">
@@ -723,10 +735,13 @@ export default function App() {
             with
           </p>
           <p className="mt-3 font-display text-xl sm:text-2xl font-bold text-maroon">
-            Barkhurdar · Shaik Azeez, BBA
+            Barkhurdar Shaik Azeez, BBA
           </p>
-          <p className="mt-2 font-body text-sm font-medium text-muted-foreground">
+          <p className="mt-2 font-body text-sm font-medium text-foreground/80">
             Procurement & Admin Executive
+          </p>
+          <p className="mt-1 font-body text-xs sm:text-sm text-muted-foreground font-medium">
+            Trans Ocean Maritime Services LLC, UAE
           </p>
           <p className="mt-3 font-body text-sm text-muted-foreground">
             Eldest son of Mr. Shaik Ameerjaani & Mrs. Thajunnisha.
