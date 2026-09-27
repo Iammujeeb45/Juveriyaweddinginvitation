@@ -405,13 +405,17 @@ export default function App() {
   const playNasheed = useCallback(() => {
     if (!audioRef.current) {
       const audio = new Audio("/nasheed.m4a");
-      audio.loop = true;
-      audio.volume = 0.28; // Very lite background music as requested
+      audio.loop = false; // Only play one time
+      audio.volume = 0.15; // Low soft background volume
+      audio.addEventListener("ended", () => {
+        setIsAudioPlaying(false);
+      });
       audioRef.current = audio;
     }
 
     const audio = audioRef.current;
-    audio.volume = 0.28;
+    audio.loop = false;
+    audio.volume = 0.15;
     audio
       .play()
       .then(() => {
@@ -431,7 +435,11 @@ export default function App() {
       audioRef.current.pause();
       setIsAudioPlaying(false);
     } else {
-      audioRef.current.volume = 0.28;
+      audioRef.current.volume = 0.15;
+      audioRef.current.loop = false;
+      if (audioRef.current.ended) {
+        audioRef.current.currentTime = 0;
+      }
       audioRef.current
         .play()
         .then(() => setIsAudioPlaying(true))
