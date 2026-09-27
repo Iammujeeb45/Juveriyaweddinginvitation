@@ -692,27 +692,29 @@ export default function App() {
         )}
       </section>
 
-      {/* COUNTING THE MOMENTS SECTION */}
-      <FadeSection
-        id="countdown"
-        className="relative mx-auto max-w-2xl px-4 py-16"
-      >
-        <div className="text-center">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-maroon">
-            Counting the moments
-          </h2>
-          <OrnateFlourish />
-        </div>
-
-        <div className="mt-6">
-          <Countdown />
-        </div>
-
-        <div className="mt-6 flex justify-center">
-          <button onClick={handleAddToCalendar} className="btn-primary">
-            <Calendar size={14} style={{ marginRight: "6px" }} />
-            Add to calendar
-          </button>
+      {/* Formal Invitation Solicitations */}
+      <FadeSection className="relative mx-auto max-w-2xl px-4 py-8">
+        <div className="ornate-frame rounded-3xl bg-card p-7 text-center">
+          <p className="font-body text-sm sm:text-base text-foreground/80 leading-relaxed font-normal">
+            Mr. Shaik Chand Basha & Mrs. Arifa solicit your gracious presence with
+            family and friends on the auspicious occasion of the marriage of their
+            daughter
+          </p>
+          <p className="mt-4 font-display text-xl sm:text-2xl font-bold text-maroon">
+            Noor-E-Chashmi · Shaik Juveriya, B.Sc.
+          </p>
+          <p className="mt-3 font-body text-xs uppercase tracking-[0.3em] font-semibold text-gold">
+            with
+          </p>
+          <p className="mt-3 font-display text-xl sm:text-2xl font-bold text-maroon">
+            Barkhurdar · Shaik Azeez, BBA
+          </p>
+          <p className="mt-2 font-body text-sm font-medium text-muted-foreground">
+            Procurement & Admin Executive
+          </p>
+          <p className="mt-3 font-body text-sm text-muted-foreground">
+            Eldest son of Mr. Shaik Ameerjaani & Mrs. Thajunnisha.
+          </p>
         </div>
       </FadeSection>
 
@@ -765,43 +767,6 @@ export default function App() {
             </p>
           </motion.div>
         </div>
-
-        {/* Formal Invitation Solicitations */}
-        <div className="mt-8 ornate-frame rounded-3xl bg-card p-7 text-center">
-          <p className="font-body text-sm sm:text-base text-foreground/80 leading-relaxed font-normal">
-            Mr. Shaik Chand Basha & Mrs. Arifa solicit your gracious presence
-            with family and friends on the auspicious occasion of the marriage
-            of their daughter
-          </p>
-          <p className="mt-4 font-display text-xl sm:text-2xl font-bold text-maroon">
-            Noor-E-Chashmi · Shaik Juveriya, B.Sc.
-          </p>
-          <p className="mt-3 font-body text-xs uppercase tracking-[0.3em] font-semibold text-gold">
-            with
-          </p>
-          <p className="mt-3 font-display text-xl sm:text-2xl font-bold text-maroon">
-            Barkhurdar · Shaik Azeez, BBA
-          </p>
-          <p className="mt-2 font-body text-sm font-medium text-muted-foreground">
-            Procurement & Admin Executive
-          </p>
-          <p className="mt-3 font-body text-sm text-muted-foreground">
-            Eldest son of Mr. Shaik Ameerjaani & Mrs. Thajunnisha.
-          </p>
-        </div>
-      </FadeSection>
-
-      {/* SEARCH / SAVE THE DATE CALENDAR SECTION */}
-      <FadeSection className="relative mx-auto max-w-2xl px-4 py-12">
-        <div className="text-center">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-maroon">
-            Search the date
-          </h2>
-          <OrnateFlourish />
-        </div>
-        <div className="mt-6">
-          <CalendarWidget />
-        </div>
       </FadeSection>
 
       {/* THE VENUE SECTION */}
@@ -833,6 +798,43 @@ export default function App() {
               Get directions
             </a>
           </div>
+        </div>
+      </FadeSection>
+
+      {/* SEARCH / SAVE THE DATE CALENDAR SECTION */}
+      <FadeSection id="calendar" className="relative mx-auto max-w-2xl px-4 py-12">
+        <div className="text-center">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-maroon">
+            Search the date
+          </h2>
+          <OrnateFlourish />
+        </div>
+        <div className="mt-6">
+          <CalendarWidget />
+        </div>
+      </FadeSection>
+
+      {/* COUNTING THE MOMENTS (COUNTDOWN) SECTION */}
+      <FadeSection
+        id="countdown"
+        className="relative mx-auto max-w-2xl px-4 py-12"
+      >
+        <div className="text-center">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-maroon">
+            Counting the moments
+          </h2>
+          <OrnateFlourish />
+        </div>
+
+        <div className="mt-6">
+          <Countdown />
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <button onClick={handleAddToCalendar} className="btn-primary">
+            <Calendar size={14} style={{ marginRight: "6px" }} />
+            Add to calendar
+          </button>
         </div>
       </FadeSection>
 
