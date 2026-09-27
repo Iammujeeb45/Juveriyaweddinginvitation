@@ -228,13 +228,13 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
       />
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center">
         <p className="text-xs uppercase tracking-[0.4em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
-          Save the date
+          Bismillah
         </p>
-        <p className="font-display text-5xl sm:text-6xl font-bold text-[oklch(0.26_0.07_25)]">
-          20 Dec
+        <p className="font-display text-4xl sm:text-5xl font-bold leading-tight text-[oklch(0.26_0.07_25)]">
+          Wedding Invitation
         </p>
-        <p className="text-sm uppercase tracking-[0.3em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
-          2026 · Sunday
+        <p className="text-xs sm:text-sm uppercase tracking-[0.3em] font-semibold text-[oklch(0.3_0.06_28)] font-body">
+          You are cordially invited
         </p>
         <motion.div
           animate={{ y: [0, -8, 0] }}
@@ -570,7 +570,11 @@ export default function App() {
           onClick={toggleAudio}
           className="floating-audio-btn"
           title={isAudioPlaying ? "Mute nasheed" : "Play nasheed"}
-          aria-label={isAudioPlaying ? "Mute background nasheed" : "Play background nasheed"}
+          aria-label={
+            isAudioPlaying
+              ? "Mute background nasheed"
+              : "Play background nasheed"
+          }
         >
           {isAudioPlaying ? <Volume2 size={16} /> : <VolumeX size={16} />}
           <span>{isAudioPlaying ? "Nasheed Playing" : "Muted"}</span>
