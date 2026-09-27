@@ -412,7 +412,7 @@ export default function App() {
     if (!audioRef.current) {
       const audio = new Audio("/nasheed.m4a");
       audio.loop = false; // Only play one time
-      audio.volume = 0.15; // Low soft background volume
+      audio.volume = 0.35; // Gentle background volume, audible on phones
       audio.addEventListener("ended", () => {
         setIsAudioPlaying(false);
       });
@@ -421,7 +421,7 @@ export default function App() {
 
     const audio = audioRef.current;
     audio.loop = false;
-    audio.volume = 0.15;
+    audio.volume = 0.35;
     audio
       .play()
       .then(() => {
@@ -441,7 +441,7 @@ export default function App() {
       audioRef.current.pause();
       setIsAudioPlaying(false);
     } else {
-      audioRef.current.volume = 0.15;
+      audioRef.current.volume = 0.35;
       audioRef.current.loop = false;
       if (audioRef.current.ended) {
         audioRef.current.currentTime = 0;
@@ -583,7 +583,7 @@ export default function App() {
           }
         >
           {isAudioPlaying ? <Volume2 size={16} /> : <VolumeX size={16} />}
-          <span>{isAudioPlaying ? "Nasheed Playing" : "Muted"}</span>
+          <span>{isAudioPlaying ? "Nasheed Playing" : "Play Nasheed"}</span>
         </button>
       )}
 
