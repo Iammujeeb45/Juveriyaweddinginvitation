@@ -741,7 +741,7 @@ export default function App() {
             Procurement & Admin Executive
           </p>
           <p className="mt-1 font-body text-xs sm:text-sm text-muted-foreground font-medium">
-            Trans Ocean Maritime Services LLC, UAE
+            Trans Ocean Maritime Services LLC, Oman
           </p>
           <p className="mt-3 font-body text-sm text-muted-foreground">
             Eldest son of Mr. Shaik Ameerjaani & Mrs. Thajunnisha.
