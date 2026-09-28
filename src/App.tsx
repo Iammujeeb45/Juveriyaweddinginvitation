@@ -127,7 +127,10 @@ interface ScratchCardProps {
   onScratchStart?: () => void;
 }
 
-const ScratchCard: React.FC<ScratchCardProps> = ({ onDone, onScratchStart }) => {
+const ScratchCard: React.FC<ScratchCardProps> = ({
+  onDone,
+  onScratchStart,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDoneRef = useRef(false);
   const isScratchingRef = useRef(false);
@@ -641,8 +644,6 @@ const CalendarWidget: React.FC = () => {
           )}
         </AnimatePresence>
       </div>
-
-     
     </div>
   );
 };
@@ -687,9 +688,18 @@ export default function App() {
             window.removeEventListener("pointerup", unlock);
             window.removeEventListener("click", unlock);
           };
-          window.addEventListener("touchend", unlock, { once: true, passive: true });
-          window.addEventListener("pointerup", unlock, { once: true, passive: true });
-          window.addEventListener("click", unlock, { once: true, passive: true });
+          window.addEventListener("touchend", unlock, {
+            once: true,
+            passive: true,
+          });
+          window.addEventListener("pointerup", unlock, {
+            once: true,
+            passive: true,
+          });
+          window.addEventListener("click", unlock, {
+            once: true,
+            passive: true,
+          });
         });
     }
   }, []);
@@ -740,8 +750,14 @@ export default function App() {
         audioRef.current.load();
       }
     };
-    window.addEventListener("touchstart", primeAudio, { once: true, passive: true });
-    window.addEventListener("pointerdown", primeAudio, { once: true, passive: true });
+    window.addEventListener("touchstart", primeAudio, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("pointerdown", primeAudio, {
+      once: true,
+      passive: true,
+    });
     return () => {
       window.removeEventListener("touchstart", primeAudio);
       window.removeEventListener("pointerdown", primeAudio);
@@ -943,7 +959,10 @@ export default function App() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.9 }}
                 >
-                  <ScratchCard onDone={handleReveal} onScratchStart={playNasheed} />
+                  <ScratchCard
+                    onDone={handleReveal}
+                    onScratchStart={playNasheed}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
