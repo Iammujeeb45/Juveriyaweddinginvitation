@@ -939,7 +939,7 @@ export default function App() {
             </p>
 
             <h1 className="mt-5 font-display text-4xl sm:text-5xl font-bold tracking-tight text-maroon">
-              Juveriya
+              Noor-E-Chashmi
             </h1>
             <p className="my-2 font-serif italic text-base sm:text-lg text-gold font-semibold">
               weds
@@ -1041,7 +1041,7 @@ export default function App() {
             of their daughter
           </p>
           <p className="mt-4 font-display text-xl sm:text-2xl font-bold text-maroon">
-            Noor-E-Chashmi · Shaik Juveriya, B.Sc.
+            Noor-E-Chashmi , B.Sc
           </p>
           <p className="mt-3 font-body text-xs uppercase tracking-[0.3em] font-semibold text-gold">
             with
@@ -1209,9 +1209,6 @@ export default function App() {
         </p>
         <p className="mt-8 font-serif text-base sm:text-lg italic text-foreground/80">
           Your presence and duas will make our joy complete.
-        </p>
-        <p className="mt-6 font-display text-3xl sm:text-4xl font-bold text-gold">
-          Juveriya & Azeez
         </p>
       </footer>
     </main>
