@@ -49,7 +49,9 @@
 .p-7 { padding: 1.75rem; }
 .p-8 { padding: 2rem; }
 
+.max-w-4xl { max-width: 56rem; }
 .max-w-2xl { max-width: 42rem; }
+.max-w-md { max-width: 28rem; }
 .max-w-sm { max-width: 24rem; }
 
 .gap-1 { gap: 0.25rem; }
@@ -57,6 +59,7 @@
 .gap-3 { gap: 0.75rem; }
 .gap-4 { gap: 1rem; }
 .gap-5 { gap: 1.25rem; }
+.gap-6 { gap: 1.5rem; }
 
 /* Grid */
 .grid { display: grid; }
@@ -134,6 +137,12 @@
   font-family: var(--font-serif);
   font-size: 0.875rem;
   user-select: none;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.calendar-day-circle:hover:not(.calendar-day-nikkah):not(.calendar-day-haldi) {
+  background-color: oklch(72% 0.12 80 / 0.12);
+  transform: scale(1.05);
 }
 
 .calendar-day-nikkah {
@@ -163,6 +172,108 @@
   pointer-events: none;
 }
 
+/* Calendar Header Badges & Pill Tabs */
+.calendar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: oklch(72% 0.12 80 / 0.12);
+  color: var(--maroon);
+  border: 1px solid oklch(72% 0.12 80 / 0.3);
+  font-family: var(--font-body);
+}
+
+.calendar-tab-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-weight: 600;
+  border: 1px solid var(--gold-soft);
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.calendar-tab-btn:hover {
+  border-color: var(--gold);
+  color: var(--maroon);
+}
+
+.calendar-tab-btn.active {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+  box-shadow: 0 2px 10px rgba(104, 27, 36, 0.28);
+}
+
+/* Luxury Segmented Calendar Tabs */
+.calendar-tabs-container {
+  display: inline-flex;
+  align-items: center;
+  background-color: oklch(95% 0.015 88);
+  border: 1px solid var(--gold-soft);
+  border-radius: 9999px;
+  padding: 5px;
+  gap: 4px;
+  box-shadow: 0 4px 18px rgba(104, 27, 36, 0.06);
+}
+
+.calendar-tab-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.calendar-tab-pill:hover:not(.active) {
+  color: var(--maroon);
+  background-color: oklch(72% 0.12 80 / 0.14);
+}
+
+.calendar-tab-pill.active {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  box-shadow: 0 3px 12px rgba(104, 27, 36, 0.28);
+}
+
+.calendar-footnote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 1.5rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 1.25rem;
+  background: oklch(99.2% 0.008 90);
+  border: 1px dashed oklch(72% 0.12 80 / 0.4);
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
 /* Responsiveness */
 @media (min-width: 640px) {
   .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -174,6 +285,12 @@
   .sm\:text-xs { font-size: 0.75rem; }
   .sm\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
   .sm\:text-6xl { font-size: 3.75rem; line-height: 1; }
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md\:flex { display: flex; }
+  .md\:hidden { display: none; }
 }
 
 /* Custom Scroll Mouse Indicator */

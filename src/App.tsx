@@ -7,14 +7,21 @@ import React, {
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
-import { RotateCcw, Calendar, MapPin, Volume2, VolumeX } from "lucide-react";
+import {
+  RotateCcw,
+  Calendar,
+  MapPin,
+  Volume2,
+  VolumeX,
+  Moon,
+} from "lucide-react";
 import "./App.css";
 
 // Wedding date: 20 Dec 2026, 10:30 AM IST (05:00 UTC)
 const WEDDING_TIMESTAMP = Date.UTC(2026, 11, 20, 5, 0, 0);
 const VENUE_NAME = "SRS Convention Hall";
 const VENUE_ADDRESS =
-  "Mecdans Road, Near Meera Mohiddin Darga, Kotamitta, Nellore";
+  "Meclince Rd, near Meera Mohiddin Darga, Kotamitta, Nellore, Andhra Pradesh 524001";
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=SRS%20Convention%20Hall%20Kotamitta%20Nellore";
 
@@ -117,9 +124,10 @@ const Lantern: React.FC<LanternProps> = ({ className = "", swing = 0 }) => {
 // Scratch Card Component with Canvas Gold Foil and Scratch Interaction
 interface ScratchCardProps {
   onDone: () => void;
+  onScratchStart?: () => void;
 }
 
-const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
+const ScratchCard: React.FC<ScratchCardProps> = ({ onDone, onScratchStart }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDoneRef = useRef(false);
   const isScratchingRef = useRef(false);
@@ -131,6 +139,8 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
     if (!ctx) return;
 
     const { width, height } = canvas;
+    if (width <= 0 || height <= 0) return;
+
     const gradient = ctx.createLinearGradient(0, 0, width, height);
     gradient.addColorStop(0, "#d9b871");
     gradient.addColorStop(0.35, "#b8913f");
@@ -152,6 +162,9 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
   }, []);
 
   const triggerReveal = useCallback(() => {
+    if (onScratchStart) {
+      onScratchStart();
+    }
     if (isDoneRef.current) return;
     isDoneRef.current = true;
 
@@ -168,22 +181,42 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
     }
 
     onDone();
-  }, [onDone]);
+  }, [onDone, onScratchStart]);
 
+  // Responsive Canvas Sizing across all devices and screen rotations
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const handleResize = () => {
+    const updateSize = () => {
       const rect = canvas.getBoundingClientRect();
-      canvas.width = Math.max(1, Math.floor(rect.width));
-      canvas.height = Math.max(1, Math.floor(rect.height));
-      drawFoil();
+      if (rect.width > 0 && rect.height > 0) {
+        canvas.width = Math.floor(rect.width);
+        canvas.height = Math.floor(rect.height);
+        if (!isDoneRef.current) {
+          drawFoil();
+        }
+      }
     };
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    updateSize();
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => {
+        updateSize();
+      });
+      ro.observe(canvas);
+    }
+
+    window.addEventListener("resize", updateSize);
+    window.addEventListener("orientationchange", updateSize);
+
+    return () => {
+      if (ro) ro.disconnect();
+      window.removeEventListener("resize", updateSize);
+      window.removeEventListener("orientationchange", updateSize);
+    };
   }, [drawFoil]);
 
   const scratchAt = (clientX: number, clientY: number) => {
@@ -193,15 +226,21 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, 32, 0, Math.PI * 2, false);
+    const radius = (window.innerWidth < 640 ? 38 : 46) * scaleX;
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
     ctx.fill();
   };
 
+  // Pointer Events (Mouse, Pen, Modern Touch)
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     isScratchingRef.current = true;
     scratchAt(e.clientX, e.clientY);
@@ -209,24 +248,65 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!isScratchingRef.current) return;
+    if (!isScratchingRef.current) {
+      isScratchingRef.current = true;
+    }
     scratchAt(e.clientX, e.clientY);
+    triggerReveal();
   };
 
   const handlePointerUp = () => {
     isScratchingRef.current = false;
   };
 
+  // Native Touch Events for Mobile / WebViews (WhatsApp, Instagram, Safari iOS)
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    isScratchingRef.current = true;
+    const touch = e.touches[0];
+    if (touch) {
+      scratchAt(touch.clientX, touch.clientY);
+    }
+    triggerReveal();
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    isScratchingRef.current = true;
+    const touch = e.touches[0];
+    if (touch) {
+      scratchAt(touch.clientX, touch.clientY);
+    }
+    triggerReveal();
+  };
+
+  const handleTouchEnd = () => {
+    isScratchingRef.current = false;
+  };
+
+  // Direct Click / Tap Fallback
+  const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    scratchAt(e.clientX, e.clientY);
+    triggerReveal();
+  };
+
   return (
-    <div className="absolute inset-0 z-20">
+    <div
+      className="absolute inset-0 z-20 cursor-pointer select-none"
+      onClick={triggerReveal}
+      onTouchStart={triggerReveal}
+    >
       <canvas
         ref={canvasRef}
-        className="h-full w-full cursor-pointer touch-none rounded-[inherit]"
+        className="h-full w-full cursor-pointer touch-none select-none rounded-[inherit]"
+        style={{ touchAction: "none", WebkitTapHighlightColor: "transparent" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onClick={handleClick}
       />
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center select-none">
         <p
           className="font-arabic text-xl sm:text-2xl font-bold text-[oklch(0.26_0.07_25)] leading-[2.2] pb-1"
           dir="rtl"
@@ -268,7 +348,7 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ onDone }) => {
         </motion.div>
 
         <p className="text-base sm:text-lg uppercase tracking-[0.25em] font-semibold text-[oklch(0.26_0.06_28)] font-body">
-          Scratch to reveal
+          Touch to reveal
         </p>
         <p className="text-sm font-serif italic text-[oklch(0.3_0.06_28)] font-medium">
           one touch opens the invitation
@@ -316,88 +396,253 @@ const Countdown: React.FC = () => {
   );
 };
 
-// December 2026 Calendar Grid
+const toArabicDigits = (num: number): string => {
+  const arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+  return String(num).replace(/[0-9]/g, (d) => arabicDigits[Number(d)]);
+};
+
+// Dual English (Gregorian) & Arabic / Islamic (Hijri - India) Calendar Grid
 const CalendarWidget: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<"english" | "islamic">("english");
+
   // December 2026 starts on Tuesday (2 blank spaces: Sun, Mon)
-  const calendarDays = useMemo(() => {
+  const gregorianDays = useMemo(() => {
     return [...[null, null], ...Array.from({ length: 31 }, (_, i) => i + 1)];
   }, []);
 
+  // Rajab 1448 AH (India - Ru'yat-e-Hilal) begins on Thursday, Dec 10, 2026
+  // Starts on Thursday -> 4 blank spaces (Sun, Mon, Tue, Wed)
+  // Rajab has 30 days in 1448 AH (10 Rajab = 19 Dec Haldi, 11 Rajab = 20 Dec Nikkah)
+  const islamicDays = useMemo(() => {
+    return [
+      ...[null, null, null, null],
+      ...Array.from({ length: 30 }, (_, i) => i + 1),
+    ];
+  }, []);
+
   return (
-    <div className="ornate-frame mx-auto max-w-sm rounded-3xl bg-card p-5">
-      <p className="text-center font-body text-sm uppercase tracking-[0.3em] text-muted-foreground">
-        December 2026
-      </p>
+    <div className="w-full">
+      {/* Luxury Segmented Calendar Tabs */}
+      <div className="mb-6 flex justify-center">
+        <div className="calendar-tabs-container">
+          <button
+            type="button"
+            onClick={() => setActiveTab("english")}
+            className={`calendar-tab-pill ${activeTab === "english" ? "active" : ""}`}
+            aria-pressed={activeTab === "english"}
+          >
+            <Calendar size={14} />
+            <span>English Calendar</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("islamic")}
+            className={`calendar-tab-pill ${activeTab === "islamic" ? "active" : ""}`}
+            aria-pressed={activeTab === "islamic"}
+          >
+            <Moon size={14} />
+            <span>Islamic Calendar</span>
+          </button>
+        </div>
+      </div>
 
-      <div className="mt-4 grid grid-cols-7 gap-1 text-center">
-        {["S", "M", "T", "W", "T", "F", "S"].map((day, idx) => (
-          <span key={idx} className="font-body text-[0.65rem] text-gold">
-            {day}
-          </span>
-        ))}
-
-        {calendarDays.map((day, idx) => {
-          if (day === null) {
-            return <span key={`empty-${idx}`} />;
-          }
-
-          const isNikkah = day === 20;
-          const isHaldi = day === 19;
-
-          return (
-            <div
-              key={day}
-              className="relative flex h-9 items-center justify-center"
+      {/* Single Calendar Card with Smooth Animation */}
+      <div className="mx-auto max-w-sm sm:max-w-md">
+        <AnimatePresence mode="wait">
+          {activeTab === "english" ? (
+            <motion.div
+              key="english-calendar"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+              className="ornate-frame mx-auto max-w-sm rounded-3xl bg-card p-5"
             >
-              {isNikkah && (
-                <motion.span
-                  className="calendar-halo"
-                  animate={{ scale: [1, 1.35, 1], opacity: [0.7, 0, 0.7] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              )}
-              <span
-                className={`calendar-day-circle ${
-                  isNikkah
-                    ? "calendar-day-nikkah"
-                    : isHaldi
-                      ? "calendar-day-haldi"
-                      : "calendar-day-normal"
-                }`}
+              <p className="text-center font-body text-sm uppercase tracking-[0.3em] text-muted-foreground">
+                December 2026
+              </p>
+
+              <div className="mt-4 grid grid-cols-7 gap-1 text-center">
+                {["S", "M", "T", "W", "T", "F", "S"].map((day, idx) => (
+                  <span
+                    key={idx}
+                    className="font-body text-[0.65rem] text-gold"
+                  >
+                    {day}
+                  </span>
+                ))}
+              </div>
+
+              {/* Month Grid */}
+              <div className="mt-3 grid grid-cols-7 gap-1 text-center">
+                {gregorianDays.map((day, idx) => {
+                  if (day === null) {
+                    return <span key={`empty-greg-${idx}`} />;
+                  }
+
+                  const isNikkah = day === 20;
+                  const isHaldi = day === 19;
+
+                  return (
+                    <div
+                      key={`greg-${day}`}
+                      className="relative flex h-9 items-center justify-center"
+                    >
+                      {isNikkah && (
+                        <motion.span
+                          className="calendar-halo"
+                          animate={{
+                            scale: [1, 1.35, 1],
+                            opacity: [0.7, 0, 0.7],
+                          }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                      )}
+                      <span
+                        className={`calendar-day-circle ${
+                          isNikkah
+                            ? "calendar-day-nikkah"
+                            : isHaldi
+                              ? "calendar-day-haldi"
+                              : "calendar-day-normal"
+                        }`}
+                      >
+                        {day}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 flex justify-center gap-4 font-body text-[0.7rem] text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <i
+                    style={{
+                      display: "inline-block",
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      border: "1.5px solid var(--gold)",
+                    }}
+                  />
+                  Haldi · 19
+                </span>
+                <span className="flex items-center gap-1">
+                  <i
+                    style={{
+                      display: "inline-block",
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      backgroundColor: "var(--accent)",
+                    }}
+                  />
+                  Nikkah · 20
+                </span>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="islamic-calendar"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+              className="ornate-frame mx-auto max-w-sm rounded-3xl bg-card p-5"
+            >
+              <p className="text-center font-body text-sm uppercase tracking-[0.3em] text-muted-foreground">
+                Rajab 1448 AH
+              </p>
+              <p
+                className="text-center font-arabic text-lg font-bold text-maroon mt-0.5"
+                dir="rtl"
               >
-                {day}
-              </span>
-            </div>
-          );
-        })}
+                رَجَب المُرَجَّب ١٤٤٨ هـ
+              </p>
+
+              <div className="mt-4 grid grid-cols-7 gap-1 text-center">
+                {["S", "M", "T", "W", "T", "F", "S"].map((day, idx) => (
+                  <span
+                    key={idx}
+                    className="font-body text-[0.65rem] text-gold"
+                  >
+                    {day}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-4 grid grid-cols-7 gap-1 text-center">
+                {islamicDays.map((day, idx) => {
+                  if (day === null) {
+                    return <span key={`empty-hijri-${idx}`} />;
+                  }
+
+                  const isNikkah = day === 11;
+                  const isHaldi = day === 10;
+
+                  return (
+                    <div
+                      key={`hijri-${day}`}
+                      className="relative flex h-9 items-center justify-center"
+                    >
+                      {isNikkah && (
+                        <motion.span
+                          className="calendar-halo"
+                          animate={{
+                            scale: [1, 1.35, 1],
+                            opacity: [0.7, 0, 0.7],
+                          }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                      )}
+                      <span
+                        className={`calendar-day-circle font-arabic text-sm ${
+                          isNikkah
+                            ? "calendar-day-nikkah"
+                            : isHaldi
+                              ? "calendar-day-haldi"
+                              : "calendar-day-normal"
+                        }`}
+                      >
+                        {toArabicDigits(day)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 flex justify-center gap-4 font-body text-[0.7rem] text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <i
+                    style={{
+                      display: "inline-block",
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      border: "1.5px solid var(--gold)",
+                    }}
+                  />
+                  Haldi · 10 Rajab
+                </span>
+                <span className="flex items-center gap-1">
+                  <i
+                    style={{
+                      display: "inline-block",
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      backgroundColor: "var(--accent)",
+                    }}
+                  />
+                  Nikkah · 11 Rajab
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div className="mt-4 flex justify-center gap-4 font-body text-[0.7rem] text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <i
-            style={{
-              display: "inline-block",
-              width: "10px",
-              height: "10px",
-              borderRadius: "50%",
-              border: "1.5px solid var(--gold)",
-            }}
-          />
-          Haldi · 19
-        </span>
-        <span className="flex items-center gap-1">
-          <i
-            style={{
-              display: "inline-block",
-              width: "10px",
-              height: "10px",
-              borderRadius: "50%",
-              backgroundColor: "var(--accent)",
-            }}
-          />
-          Nikkah · 20
-        </span>
-      </div>
+     
     </div>
   );
 };
@@ -409,44 +654,62 @@ export default function App() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playNasheed = useCallback(() => {
-    if (!audioRef.current) {
-      const audio = new Audio("/nasheed.m4a");
-      audio.loop = false; // Only play one time
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
       audio.volume = 0.35; // Gentle background volume, audible on phones
-      audio.addEventListener("ended", () => {
-        setIsAudioPlaying(false);
-      });
-      audioRef.current = audio;
+    } catch {
+      // iOS volume read-only safety
+    }
+    audio.loop = false;
+
+    if (audio.ended) {
+      audio.currentTime = 0;
     }
 
-    const audio = audioRef.current;
-    audio.loop = false;
-    audio.volume = 0.35;
-    audio
-      .play()
-      .then(() => {
-        setIsAudioPlaying(true);
-      })
-      .catch((err) => {
-        console.log("Audio waiting for user gesture:", err);
-      });
+    const promise = audio.play();
+    if (promise !== undefined) {
+      promise
+        .then(() => {
+          setIsAudioPlaying(true);
+        })
+        .catch((err) => {
+          console.warn("Audio play blocked by browser:", err);
+          setIsAudioPlaying(false);
+          // If browser restricts audio before gesture completion, resume on next touch/click
+          const unlock = () => {
+            audio
+              .play()
+              .then(() => setIsAudioPlaying(true))
+              .catch(() => {});
+            window.removeEventListener("touchend", unlock);
+            window.removeEventListener("pointerup", unlock);
+            window.removeEventListener("click", unlock);
+          };
+          window.addEventListener("touchend", unlock, { once: true, passive: true });
+          window.addEventListener("pointerup", unlock, { once: true, passive: true });
+          window.addEventListener("click", unlock, { once: true, passive: true });
+        });
+    }
   }, []);
 
   const toggleAudio = () => {
-    if (!audioRef.current) {
-      playNasheed();
-      return;
-    }
+    const audio = audioRef.current;
+    if (!audio) return;
+
     if (isAudioPlaying) {
-      audioRef.current.pause();
+      audio.pause();
       setIsAudioPlaying(false);
     } else {
-      audioRef.current.volume = 0.35;
-      audioRef.current.loop = false;
-      if (audioRef.current.ended) {
-        audioRef.current.currentTime = 0;
+      try {
+        audio.volume = 0.35;
+      } catch {}
+      audio.loop = false;
+      if (audio.ended) {
+        audio.currentTime = 0;
       }
-      audioRef.current
+      audio
         .play()
         .then(() => setIsAudioPlaying(true))
         .catch(() => {});
@@ -470,11 +733,25 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Pre-load audio on first user touch anywhere to guarantee instant playback on strict mobile engines
+  useEffect(() => {
+    const primeAudio = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.load();
+      }
+    };
+    window.addEventListener("touchstart", primeAudio, { once: true, passive: true });
+    window.addEventListener("pointerdown", primeAudio, { once: true, passive: true });
+    return () => {
+      window.removeEventListener("touchstart", primeAudio);
+      window.removeEventListener("pointerdown", primeAudio);
+    };
+  }, []);
+
   useEffect(() => {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current = null;
       }
     };
   }, []);
@@ -491,7 +768,11 @@ export default function App() {
 
       const preventTouchMove = (e: TouchEvent) => {
         // Allow canvas scratching gestures to be handled natively with touch-action: none
-        if ((e.target as HTMLElement)?.tagName?.toLowerCase() === "canvas") {
+        const target = e.target as HTMLElement | null;
+        if (
+          target?.tagName?.toLowerCase() === "canvas" ||
+          target?.closest?.(".scratch-container")
+        ) {
           return;
         }
         if (e.cancelable) {
@@ -564,6 +845,18 @@ export default function App() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+      {/* Hidden preloaded audio element for instant playback on all mobile & desktop browsers */}
+      <audio
+        ref={audioRef}
+        id="wedding-nasheed-audio"
+        src="/nasheed.m4a"
+        preload="auto"
+        playsInline
+        onEnded={() => setIsAudioPlaying(false)}
+        onPlay={() => setIsAudioPlaying(true)}
+        onPause={() => setIsAudioPlaying(false)}
+      />
+
       {/* Repeating Arabesque Geometric Watermark Pattern */}
       <div
         className="pointer-events-none fixed inset-0 arabesque-bg opacity-40"
@@ -591,11 +884,11 @@ export default function App() {
         <button
           onClick={handleResetCard}
           className="reset-scratch-btn"
-          title="Scratch card again"
-          aria-label="Scratch card again"
+          title="Open invitation card again"
+          aria-label="Open invitation card again"
         >
           <RotateCcw size={14} />
-          <span>Scratch Again</span>
+          <span>Reveal Again</span>
         </button>
       )}
 
@@ -645,12 +938,12 @@ export default function App() {
             <AnimatePresence>
               {!revealed && (
                 <motion.div
-                  className="absolute inset-0 rounded-[2rem]"
+                  className="scratch-container absolute inset-0 rounded-[2rem]"
                   animate={isRevealing ? { opacity: 0 } : { opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.9 }}
                 >
-                  <ScratchCard onDone={handleReveal} />
+                  <ScratchCard onDone={handleReveal} onScratchStart={playNasheed} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -741,7 +1034,7 @@ export default function App() {
             Procurement & Admin Executive
           </p>
           <p className="mt-1 font-body text-xs sm:text-sm text-muted-foreground font-medium">
-            Trans Ocean Maritime Services LLC, Oman
+            Trans Ocean Maritime Services LLC, Dubai.
           </p>
           <p className="mt-3 font-body text-sm text-muted-foreground">
             Eldest son of Mr. Shaik Ameerjaani & Mrs. Thajunnisha.
@@ -775,6 +1068,12 @@ export default function App() {
             <p className="mt-2 font-serif text-base font-medium text-foreground/90">
               Saturday, 19 December 2026
             </p>
+            <p
+              className="mt-1 font-arabic text-sm font-semibold text-gold"
+              dir="rtl"
+            >
+              ١٠ رَجَب ١٤٤٨ هـ · 10 Rajab 1448 AH
+            </p>
             <p className="mt-2 font-body text-sm text-muted-foreground">
               An evening of colour & blessings
             </p>
@@ -792,6 +1091,12 @@ export default function App() {
             </h3>
             <p className="mt-2 font-serif text-base font-medium text-foreground/90">
               Sunday, 20 December 2026
+            </p>
+            <p
+              className="mt-1 font-arabic text-sm font-semibold text-gold"
+              dir="rtl"
+            >
+              ١١ رَجَب ١٤٤٨ هـ · 11 Rajab 1448 AH
             </p>
             <p className="mt-2 font-body text-sm text-muted-foreground">
               10:30 AM – 11:30 AM · Lunch at 12:00 Noon
@@ -815,9 +1120,8 @@ export default function App() {
               {VENUE_NAME}
             </p>
             <p className="mt-3 font-body text-sm sm:text-base text-foreground/80 leading-relaxed">
-              Mecdans Road, Near Meera Mohiddin Darga,
-              <br />
-              Kotamitta, Nellore
+              Meclince Rd, near Meera Mohiddin Darga, <br />
+              Kotamitta, Nellore, Andhra Pradesh 524001
             </p>
             <a
               href={MAPS_URL}
@@ -842,8 +1146,11 @@ export default function App() {
             Search the date
           </h2>
           <OrnateFlourish />
+          <p className="mt-2 text-xs sm:text-sm uppercase tracking-[0.25em] text-muted-foreground font-medium">
+            English &amp; Islamic (Hijri) Calendars
+          </p>
         </div>
-        <div className="mt-6">
+        <div className="mt-8">
           <CalendarWidget />
         </div>
       </FadeSection>
